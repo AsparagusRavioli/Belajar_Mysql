@@ -177,3 +177,26 @@ SELECT * FROM produk ORDER BY id LIMIT 5;
 SELECT * FROM produk ORDER BY id LIMIT 0,5;
 SELECT * FROM produk ORDER BY id LIMIT 5,5;
 SELECT * FROM produk ORDER BY id LIMIT 10,5;
+
+USE belajar_mysql;
+SHOW tables;
+
+SELECT DISTINCT kategori FROM produk;
+
+SELECT 10 + 10 AS hasil;
+SELECT 10 * 10 AS hasil;
+SELECT 10 - 5 AS hasil;
+SELECT 10 % 3 AS hasil;
+SELECT 10 / 2 AS hasil;
+
+SELECT id,nama,price, 
+price DIV 1000 AS 'Price in K' 
+FROM produk;
+
+SELECT id,nama,price 
+FROM produk 
+WHERE price div 1000 > 15;
+
+SELECT id, COS(price) 
+,SIN(price), 
+TAN(price) FROM produk;
