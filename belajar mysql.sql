@@ -200,3 +200,66 @@ WHERE price div 1000 > 15;
 SELECT id, COS(price) 
 ,SIN(price), 
 TAN(price) FROM produk;
+
+CREATE TABLE admin(
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+)ENGINE = innodb;
+
+INSERT INTO admin(first_name,last_name)
+VALUES ('Muhammad','asfarel'),
+       ('Komeng','tekomeng'),
+       ('Oyen','suroyen');
+ 
+SELECT * FROM admin ORDER BY id;
+DELETE FROM admin where id = 3;
+
+INSERT INTO admin(first_name,last_name)
+VALUES ('Oyen','suroyen');
+
+SELECT LAST_INSERT_ID();
+
+SELECT id,
+     LOWER(nama) AS 'Name Lower',
+     UPPER(nama) AS 'Name Upper',
+     LENGTH(nama) AS 'Name Length'
+ FROM produk;
+
+SELECT id,created_at,
+    EXTRACT(YEAR FROM created_at) AS Year,
+    EXTRACT(MONTH FROM created_at) AS Month
+FROM produk;
+
+SELECT id,created_at, YEAR(created_at), MONTH(created_at) FROM produk;
+
+SELECT id,
+      kategori,
+        CASE kategori
+             WHEN 'Makanan' THEN 'Mantapuu'
+             WHEN 'Minuman' THEN 'Segarruuuuu'
+             ELSE 'Tak tau lah , apa itu'
+		     END AS 'Kategori'
+FROM produk;
+
+SELECT id,
+       price,
+       IF(price <= 15000, 'Murah', 
+       IF(price <= 20000, 'Mahal','Mahal banget')) 
+       as 'Mahal?'
+FROM produk;
+
+SELECT id,nama, IFNULL(description, 'Kosong') FROM produk;
+
+SELECT COUNT(id) AS 'Total produk' FROM produk;
+
+SELECT MAX(price) AS 'Produk termahal' FROM produk;
+
+SELECT MIN(price) AS 'Produk termurah' FROM produk;
+
+SELECT AVG(price) AS 'Produk rata-rata' FROM produk;
+
+SELECT SUM(price) AS 'Produk total' FROM produk;
+
+SELECT SUM(quantity) AS 'Total produk quantity' FROM produk;
