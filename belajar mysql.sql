@@ -263,3 +263,172 @@ SELECT AVG(price) AS 'Produk rata-rata' FROM produk;
 SELECT SUM(price) AS 'Produk total' FROM produk;
 
 SELECT SUM(quantity) AS 'Total produk quantity' FROM produk;
+
+use belajar_mysql;
+
+SELECT COUNT(id) AS 'Total produk', kategori FROM produk GROUP BY kategori;
+
+SELECT MAX(price) AS 'Produk termahal', kategori  FROM produk GROUP BY kategori;
+
+SELECT MIN(price) AS 'Produk termurah', kategori  FROM produk GROUP BY kategori;
+
+SELECT AVG(price) AS 'Produk rata-rata', kategori  FROM produk GROUP BY kategori ;
+
+SELECT SUM(price) AS 'Produk total', kategori  FROM produk GROUP BY kategori;
+
+SELECT SUM(quantity) AS 'Total produk quantity', kategori  FROM produk GROUP BY kategori;
+
+
+SELECT COUNT(id) AS total, 
+kategori 
+FROM produk 
+GROUP BY kategori
+HAVING total > 5;
+
+SELECT COUNT(id) AS total, 
+kategori 
+FROM produk 
+GROUP BY kategori
+HAVING total < 5;
+
+SELECT MAX(price) AS total, 
+kategori 
+FROM produk 
+GROUP BY kategori
+HAVING total < 15000;
+
+SELECT MAX(price),max(quantity) AS total, 
+kategori 
+FROM produk 
+GROUP BY kategori;
+
+CREATE TABLE customer
+(
+   id INT NOT NULL AUTO_INCREMENT,
+   email VARCHAR(100) NOT NULL,
+   first_name VARCHAR(100) NOT NULL,
+   last_name VARCHAR(100),
+   PRIMARY KEY (id),
+   UNIQUE KEY email_unique(email)
+)ENGINE =InnoDB;
+
+DESC customer;
+
+ALTER TABLE customer
+DROP CONSTRAINT email_unique;
+
+ALTER TABLE customer 
+ADD CONSTRAINT email_unique UNIQUE (email);
+
+INSERT INTO customer(email,first_name,last_name)
+VALUES('ikanlele@gmail.com','ikan','Lele');
+
+SELECT * FROM customer;
+
+INSERT INTO customer(email,first_name,last_name)
+VALUES('ikanbawal@gmail.com','ikan','Bawal');
+
+SELECT * FROM produk;
+
+INSERT INTO produk(id,nama,kategori,price,quantity)
+VALUES('P020','Permen','Lain-lain', 500 , 1000);
+
+UPDATE produk
+SET price = 1000
+WHERE id = 'P020';
+
+ALTER TABLE produk
+ADD CONSTRAINT price_check CHECK (price >= 1000);
+
+ALTER TABLE produk
+ADD CONSTRAINT price_check CHECK (price >= 1000 AND price >= 10000000);
+
+SHOW CREATE TABLE produk;
+
+CREATE TABLE sellers
+(
+   id INT NOT NULL AUTO_INCREMENT,
+   nama VARCHAR(100) NOT NULL,
+   nama2 VARCHAR(100) ,
+   nama3 VARCHAR(100) ,
+   email VARCHAR(100) NOT NULL,
+   PRIMARY KEY (id),
+   UNIQUE KEY email_unique (email),
+   INDEX name_index (nama),
+   INDEX name2_index (nama2),
+   INDEX name3_index (nama3),
+   INDEX nama1_nama2_nama3_index (nama, nama2, nama3)
+)ENGINE =InnoDB;
+
+desc sellers;
+SHOW CREATE TABLE sellers;
+
+SELECT * FROM sellers WHERE nama = 'X';
+
+SELECT * FROM sellers WHERE nama = 'X' AND nama2 = 'X';
+
+SELECT * FROM sellers WHERE nama = 'X' AND nama2 = 'X' AND nama3 = 'X';
+
+ALTER TABLE sellers
+DROP INDEX name_index;
+
+ALTER TABLE sellers
+ADD INDEX nama_index (nama);
+
+ALTER TABLE produk
+ADD FULLTEXT produk_fulltext (nama,description);
+
+SHOW CREATE TABLE produk;
+
+SELECT * FROM produk 
+WHERE nama LIKE '%ayam%' OR description LIKE '%ayam%';
+
+SELECT * FROM produk 
+WHERE MATCH(nama,description) 
+AGAINST ('ayam' IN NATURAL LANGUAGE MODE);
+
+SELECT * FROM produk 
+WHERE MATCH(nama,description) 
+AGAINST ('+ayam -bakso' IN BOOLEAN MODE);
+
+SELECT * FROM produk 
+WHERE MATCH(nama,description) 
+AGAINST ('bakso' WITH QUERY EXPANSION);
+
+
+CREATE TABLE wishlist(
+  id INT NOT NULL AUTO_INCREMENT,
+  id_produk VARCHAR(10) NOT NULL,
+  description text,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_wishlist_produk
+                        FOREIGN KEY (id_produk) REFERENCES produk (id)
+)ENGINE = InnoDB;
+
+SHOW CREATE TABLE wishlist;
+
+ALTER TABLE wishlist 
+DROP CONSTRAINT fk_wishlist_produk;
+
+ALTER TABLE wishlist
+  ADD CONSTRAINT fk_wishlist_produk
+     FOREIGN KEY (id_produk) REFERENCES produk (id)
+     ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO wishlist (id_produk, description)
+VALUES('P001','Makanan Kesukaan');
+
+INSERT INTO wishlist (id_produk, description)
+VALUES('SALAH','Makanan Kesukaan');
+
+SELECT * FROM produk;
+SELECT * FROM wishlist;
+
+DELETE FROM produk
+WHERE id = 'Pxxx';
+
+INSERT INTO produk (id, nama,kategori, price, quantity)
+VALUES ('Pxxx', 'Contoh','Lain-lain', 1000, 1500);
+
+INSERT INTO wishlist (id_produk, description)
+VALUES('Pxxx','Makanan Kesukaan');
